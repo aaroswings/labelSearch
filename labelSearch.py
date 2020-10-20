@@ -59,20 +59,14 @@ class SearchWindow(QWidget):
     def __init__(self, controller):
         QWidget.__init__(self)
         self.controller = controller
+        self.init_layout()
 
-        window_geom = (300, 100, 600, 800)
-        self.model = Model()
-        self.init_layout(window_geom)
-
-
-    def init_layout(self, window_geom):
+    def init_layout(self):
         self.setWindowTitle(__appname__)
-        self.setGeometry(*window_geom)
-
         self.search_area = self.SearchArea(self.controller)
         sb = self.search_area.search_bar
         sb.returnPressed.connect(
-            lambda: self.controller.push_search_entry(self.get_search_entry()))
+            lambda: self.controller.push_search_tag(self.get_search_entry()))
         vbox_root = QVBoxLayout()
         vbox_root.addWidget(self.search_area)
 
@@ -117,7 +111,7 @@ class AppController():
         self.window.show()
         self.model = Model()
 
-    def push_search_entry(self, tag):
+    def push_search_tag(self, tag):
         if tag is None: return 
         self.model.add_tag_to_search(tag)
         self.window.add_tag(tag)
